@@ -26,18 +26,19 @@ class SegmentCirclePainter extends CustomPainter {
     var rect = Rect.fromLTWH(0, 0, size.width, size.height);
     final circleRadius = rect.width / 2;
     final step = circleRadianAmount/inputNumbers.length;
-    var segmentStartPoint = 0.0;
+    var segmentStartPoint = -step/2;
     for (final each in inputNumbers) {
       final colorIndex = Random().nextInt(colors.length - 1);
       paint..color = colors.removeFirst();
       // print("segmentStartPoint = ${segmentStartPoint} step = $step colorIndex = $colorIndex");
       canvas.drawArc(rect, segmentStartPoint, step, true, paint);
-      final textCircleRadius = circleRadius - 20;
+      final textCircleRadius = circleRadius - circleRadius/5;
       final centerInCurrentSegmentRadian = segmentStartPoint + step/2;
       final textPointX = (textCircleRadius  * cos(centerInCurrentSegmentRadian)) + rect.width/2;
       final textPointY = (textCircleRadius  * sin(centerInCurrentSegmentRadian)) + rect.height/2;
       final textSpan = TextSpan(
         text: each.toString(),
+        style: TextStyle(color: Colors.black, fontSize: 21)
       );
       final textPainter = TextPainter(
         text: textSpan,
@@ -59,10 +60,6 @@ class SegmentCirclePainter extends CustomPainter {
       segmentStartPoint+= step;
     }
     canvas.drawCircle(circleOffset, centerCircleDiameter, paint..color = Colors.white);
-
-    // canvas.drawArc(rect, 2, 6, true, paint);
-
-
   }
 
   @override

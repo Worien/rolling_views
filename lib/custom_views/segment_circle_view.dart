@@ -13,7 +13,7 @@ class SegmentCircleWidget extends StatelessWidget {
         alignment: Alignment.center,
         child: CustomPaint(
           painter: SegmentCirclePainter(),
-          size: Size(screenWidth, screenWidth),
+          size: Size(screenWidth - 10, screenWidth - 10),
         ),
       ),
     );
