@@ -26,7 +26,6 @@ class SegmentCirclePainter extends CustomPainter {
     final circleRadius = rect.width / 2;
     final step = circleRadianAmount/inputNumbers.length;
     var segmentStartPoint = -step/2;
-    // var segmentStartPoint = 0.0;
     var index = 0;
     for (final label in inputNumbers) {
       paint..color = colors[index%colors.length];
@@ -41,8 +40,8 @@ class SegmentCirclePainter extends CustomPainter {
   }
 
   void drawLabel(double textCircleRadius, double centerInCurrentSegmentRadian, Rect rect, String label, Size size, Canvas canvas) {
-    final textPointX = (textCircleRadius  * cos(centerInCurrentSegmentRadian)) + rect.width/2;
-    final textPointY = (textCircleRadius  * sin(centerInCurrentSegmentRadian)) + rect.height/2;
+    final textPointX = (textCircleRadius  * cos(centerInCurrentSegmentRadian)) + rect.width/2 - 8;
+    final textPointY = (textCircleRadius  * sin(centerInCurrentSegmentRadian)) + rect.width/2 - 8;
     final textSpan = TextSpan(
       text: label,
       style: TextStyle(color: Colors.black, fontSize: 21)
