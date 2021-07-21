@@ -31,21 +31,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  SegmentCircleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleAnimatedViewController();
+  SegmentCircleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleAnimatedViewController([0, 1,2, 3,]);
   void _incrementCounter() {
     segmentCircleAnimatedViewController.runAnimation();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
 
         title: Text(widget.title),
       ),
       body: Center(
-        child: SegmentCircleAnimatedView(segmentCircleController: segmentCircleAnimatedViewController),
+        child: SegmentCircleAnimatedView(segmentCircleController: segmentCircleAnimatedViewController,),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
@@ -54,4 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
+
 }

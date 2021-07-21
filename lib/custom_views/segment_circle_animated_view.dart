@@ -26,7 +26,7 @@ class _SegmentCircleAnimatedViewState extends State<SegmentCircleAnimatedView>
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 15), upperBound: angle);
     widget.segmentCircleController._init(angle, _controller, context);
-    widget.segmentCircleController.runAnimation();
+    // widget.segmentCircleController.runAnimation();
     super.initState();
   }
 
@@ -34,13 +34,17 @@ class _SegmentCircleAnimatedViewState extends State<SegmentCircleAnimatedView>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(animation: _controller, builder: (BuildContext context, Widget? _widget) {
-      print("value = ${_controller.value}");
-      return new Transform.rotate(
-        angle: _controller.value,
-        child: SegmentCircleWidget(),
-      );
-    },);
+    return Stack(children: [
+
+      AnimatedBuilder(animation: _controller, builder: (BuildContext context, Widget? _widget) {
+        print("value = ${_controller.value}");
+        return new Transform.rotate(
+          angle: _controller.value,
+          child: SegmentCircleWidget(widget.segmentCircleController.inputNumbers),
+        );
+      },),
+      Align(alignment: Alignment.centerRight, child:Container(width:40, height: 40,child: Image(image:AssetImage("assets/images/arrow_left.ico")))),
+    ],);
   }
 
   @override
@@ -55,11 +59,17 @@ class SegmentCircleAnimatedViewController {
   late AnimationController _controller;
   late double _angle;
   late BuildContext _context;
+  final inputNumbers;
+  double step = 0;
+  double startPointAngle = 0;
+  SegmentCircleAnimatedViewController(this.inputNumbers);
 
   void _init(double angle, AnimationController controller, BuildContext context){
     this._angle = angle;
     this._controller = controller;
     _context = context;
+    step = (2*pi)/inputNumbers.length;
+    startPointAngle = -step/2;
   }
 
   void runAnimation() {
@@ -72,10 +82,16 @@ class SegmentCircleAnimatedViewController {
 
     final simulation = SpringSimulation(spring, 0, _angle, -2);
     _controller.animateWith(simulation).whenCompleteOrCancel(() {
-      print("complete");
-      final snackBar = SnackBar(content: Text('$_angle'));
+      var exactAngle = calculateValueFromAngle(_angle%(pi*2), inputNumbers);
+      final snackBar = SnackBar(content: Text('$exactAngle'));
       ScaffoldMessenger.of(_context).showSnackBar(snackBar);
-
     });
+  }
+
+  int calculateValueFromAngle(double angle, List inputNumbers) {
+    double indexDouble = angle / step;
+    double some = (2*pi) - angle - startPointAngle;
+    int index = some ~/ step;
+    return inputNumbers[index];
   }
 }

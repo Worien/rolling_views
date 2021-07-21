@@ -8,15 +8,11 @@ class SegmentCirclePainter extends CustomPainter {
   static const Color centerCircleColor = Colors.black;
   static const double centerCircleDiameter = 10;
   static const double circleRadianAmount = 2 * pi;
-  var colors = Queue.from([Colors.red, Colors.green, Colors.yellow, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo]);
+  var colors = [ Colors.green, Colors.yellow, Colors.deepPurple, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo];
 
-  final inputNumbers = [1,2, 3, 4, 5, 6, 7, 8,];
+  final inputNumbers;
 
-  void _reinitColors(){
-    if (colors.isEmpty) {
-      colors = Queue.from([Colors.red, Colors.green, Colors.yellow, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo]);
-    }
-  }
+  SegmentCirclePainter(this.inputNumbers);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -30,39 +26,43 @@ class SegmentCirclePainter extends CustomPainter {
     final circleRadius = rect.width / 2;
     final step = circleRadianAmount/inputNumbers.length;
     var segmentStartPoint = -step/2;
-    for (final each in inputNumbers) {
-      _reinitColors();
-      paint..color = colors.removeFirst();
-      // print("segmentStartPoint = ${segmentStartPoint} step = $step colorIndex = $colorIndex");
+    // var segmentStartPoint = 0.0;
+    var index = 0;
+    for (final label in inputNumbers) {
+      paint..color = colors[index%colors.length];
+      index ++;
       canvas.drawArc(rect, segmentStartPoint, step, true, paint);
       final textCircleRadius = circleRadius - circleRadius/5;
       final centerInCurrentSegmentRadian = segmentStartPoint + step/2;
-      final textPointX = (textCircleRadius  * cos(centerInCurrentSegmentRadian)) + rect.width/2;
-      final textPointY = (textCircleRadius  * sin(centerInCurrentSegmentRadian)) + rect.height/2;
-      final textSpan = TextSpan(
-        text: each.toString(),
-        style: TextStyle(color: Colors.black, fontSize: 21)
-      );
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-      );
-      textPainter.layout(
-        minWidth: 0,
-        maxWidth: size.width,
-      );
-      final offset = Offset(textPointX, textPointY);
-      canvas.save();
-      final pivot = textPainter.size.center(offset);
-      canvas.translate(pivot.dx, pivot.dy);
-      canvas.rotate(centerInCurrentSegmentRadian);
-      canvas.translate(-pivot.dx, -pivot.dy);
-      textPainter.paint(canvas, offset);
-      canvas.restore();
-      // print("textPointX = $textPointX textPointY = $textPointY");
+      drawLabel(textCircleRadius, centerInCurrentSegmentRadian, rect, label.toString(), size, canvas);
       segmentStartPoint+= step;
     }
     canvas.drawCircle(circleOffset, centerCircleDiameter, paint..color = Colors.white);
+  }
+
+  void drawLabel(double textCircleRadius, double centerInCurrentSegmentRadian, Rect rect, String label, Size size, Canvas canvas) {
+    final textPointX = (textCircleRadius  * cos(centerInCurrentSegmentRadian)) + rect.width/2;
+    final textPointY = (textCircleRadius  * sin(centerInCurrentSegmentRadian)) + rect.height/2;
+    final textSpan = TextSpan(
+      text: label,
+      style: TextStyle(color: Colors.black, fontSize: 21)
+    );
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout(
+      minWidth: 0,
+      maxWidth: size.width,
+    );
+    final offset = Offset(textPointX, textPointY);
+    canvas.save();
+    final pivot = textPainter.size.center(offset);
+    canvas.translate(pivot.dx, pivot.dy);
+    canvas.rotate(centerInCurrentSegmentRadian);
+    canvas.translate(-pivot.dx, -pivot.dy);
+    textPainter.paint(canvas, offset);
+    canvas.restore();
   }
 
   @override
