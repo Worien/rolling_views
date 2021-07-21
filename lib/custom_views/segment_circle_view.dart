@@ -8,7 +8,6 @@ class SegmentCircleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
         child: CustomPaint(

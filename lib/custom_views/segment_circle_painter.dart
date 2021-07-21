@@ -8,12 +8,15 @@ class SegmentCirclePainter extends CustomPainter {
   static const Color centerCircleColor = Colors.black;
   static const double centerCircleDiameter = 10;
   static const double circleRadianAmount = 2 * pi;
-  final colors = Queue.from([Colors.red, Colors.green, Colors.yellow, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo]);
-
-
-
+  var colors = Queue.from([Colors.red, Colors.green, Colors.yellow, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo]);
 
   final inputNumbers = [1,2, 3, 4, 5, 6, 7, 8,];
+
+  void _reinitColors(){
+    if (colors.isEmpty) {
+      colors = Queue.from([Colors.red, Colors.green, Colors.yellow, Colors.pink, Colors.amber, Colors.teal, Colors.cyanAccent, Colors.blue, Colors.deepOrangeAccent, Colors.indigo]);
+    }
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -28,7 +31,7 @@ class SegmentCirclePainter extends CustomPainter {
     final step = circleRadianAmount/inputNumbers.length;
     var segmentStartPoint = -step/2;
     for (final each in inputNumbers) {
-      final colorIndex = Random().nextInt(colors.length - 1);
+      _reinitColors();
       paint..color = colors.removeFirst();
       // print("segmentStartPoint = ${segmentStartPoint} step = $step colorIndex = $colorIndex");
       canvas.drawArc(rect, segmentStartPoint, step, true, paint);
@@ -56,7 +59,7 @@ class SegmentCirclePainter extends CustomPainter {
       canvas.translate(-pivot.dx, -pivot.dy);
       textPainter.paint(canvas, offset);
       canvas.restore();
-      print("textPointX = $textPointX textPointY = $textPointY");
+      // print("textPointX = $textPointX textPointY = $textPointY");
       segmentStartPoint+= step;
     }
     canvas.drawCircle(circleOffset, centerCircleDiameter, paint..color = Colors.white);
