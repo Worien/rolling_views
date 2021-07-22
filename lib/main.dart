@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter_circle_views/custom_views/segment_circle_animated_view.dart';
+import 'package:flutter_circle_views/custom_views/segment_circle_bottle_animated_view.dart';
 import 'package:flutter_circle_views/custom_views/segment_circle_view.dart';
+
+import 'custom_views/segment_circle_bottle_view.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,9 +35,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  SegmentCircleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleAnimatedViewController([0, 1,2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  SegmentCircleBottleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleBottleAnimatedViewController(["one", "two","three", "four", "five", "six"]);
   void _incrementCounter() {
-    segmentCircleAnimatedViewController.runAnimation();
+    segmentCircleAnimatedViewController.runAnimation(springDescription: SpringDescription(
+      mass: 2,
+      stiffness: 10,
+      damping: 3,
+    ));
   }
 
   @override
@@ -44,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: SegmentCircleAnimatedView(segmentCircleController: segmentCircleAnimatedViewController,),
+        // child: SegmentCircleAnimatedView(segmentCircleController: segmentCircleAnimatedViewController,),
+        child: SegmentCircleBottleAnimatedView(segmentCircleController: segmentCircleAnimatedViewController,),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
