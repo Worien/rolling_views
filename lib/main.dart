@@ -35,7 +35,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  SegmentCircleBottleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleBottleAnimatedViewController(["one", "two","three", "four", "five", "six"]);
+  SegmentCircleBottleAnimatedViewController segmentCircleAnimatedViewController = SegmentCircleBottleAnimatedViewController(List.generate(
+    20,
+        (index) => (index).toString(),
+  ),);
   void _incrementCounter() {
     segmentCircleAnimatedViewController.runAnimation(springDescription: SpringDescription(
       mass: 2,

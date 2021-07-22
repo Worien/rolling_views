@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_circle_views/custom_views/segment_circle_bottle_view.dart';
-import 'package:flutter_circle_views/custom_views/segment_circle_view.dart';
 
 class SegmentCircleBottleAnimatedView extends StatefulWidget {
 
@@ -40,7 +39,7 @@ class _SegmentCircleBottleAnimatedViewState extends State<SegmentCircleBottleAni
         print("value = ${_controller.value}");
         return new Transform.rotate(
           angle: _controller.value,
-          child: Image(image: AssetImage("assets/images/wine-bottle.png"), height: MediaQuery.of(context).size.width/2,),
+          child: Transform.rotate(angle: pi/2, child: Image(image: AssetImage("assets/images/wine-bottle.png"), height: MediaQuery.of(context).size.width/2,)),
         );
       },)),
       // Align(alignment: Alignment.centerRight, child:Container(width:40, height: 40,child: Image(image:AssetImage("assets/images/arrow_left.ico")))),
@@ -89,14 +88,18 @@ class SegmentCircleBottleAnimatedViewController {
   }
 
   String calculateValueFromAngle(double angle, List inputLabels) {
-    double backAngle = angle + startPointAngle*2;
-    double doubleIndex = backAngle / step;
+    double backAngle = angle + startPointAngle;
+    double doubleIndex = (angle / step);
     if (doubleIndex < 0) {
-      doubleIndex = 2*pi + doubleIndex;
+      doubleIndex = -doubleIndex;
     }
-    int index = doubleIndex.toInt();
+    int index = doubleIndex.round();
+    if (index >= inputLabels.length) {
+      index = 0;
+    }
     print("startPointAngle = ${startPointAngle} step = ${step} angle = $angle doubleIndex = $doubleIndex");
     print("index = $index");
+
     return inputLabels[index];
   }
 }
